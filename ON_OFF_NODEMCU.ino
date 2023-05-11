@@ -13,10 +13,11 @@ const char WiFiPassword[] = "";//Leave Blank if you do not want to have a passwo
 const char AP_NameChar[] = "DORAEMON";
 
 //speed 
-int speedCar = 300;         // 400 - 1023.
+int speedCarlist[4] = {100, 300, 900, 1023};         // 400 - 1023.
 //int speed_Coeff = 3;
-int turnSpeed = 160; //turn speed of robot
-int backSpeed = 250; //back speed of robot
+int speedCar = speedCarlist[3];
+int turnSpeed = 200; //turn speed of robot
+int backSpeed = 350; //back speed of robot
 
 //flag for line following
 bool flag_line = false;
@@ -110,6 +111,43 @@ void loop()
   // Read the first line of the request
   request = client.readStringUntil('\r');
   //GET / HTTP/1.1
+  
+  //Controlling speed
+  if(request == "GET /1 HTTP/1.1"){
+    //client.flush();
+    client.println("HTTP/1.1 200 OK\r\n");
+    speedCar = speedCarlist[0];
+    client.println( "Setting speed = 1");
+    client.flush();
+    Serial.println("Setting speed = 1");
+  }
+  else if(request == "GET /2 HTTP/1.1"){
+    //client.flush();
+    client.println("HTTP/1.1 200 OK\r\n");
+    speedCar = speedCarlist[1];
+    client.println( "Setting speed = 2");
+    client.flush();
+    Serial.println("Setting speed = 2");
+  }
+  else if(request == "GET /3 HTTP/1.1"){
+    //client.flush();
+    client.println("HTTP/1.1 200 OK\r\n");
+    speedCar = speedCarlist[2];
+    client.println( "Setting speed = 3");
+    client.flush();
+    Serial.println("Setting speed = 3");
+  }
+  else if(request == "GET /4 HTTP/1.1"){
+    //client.flush();
+    client.println("HTTP/1.1 200 OK\r\n");
+    speedCar = speedCarlist[3];
+    client.println( "Setting speed = 4");
+    client.flush();
+    Serial.println("Setting speed = 4");
+  }
+
+  //checking for line following mode
+
   if  ( request == "GET /LINE_ON HTTP/1.1" ) {
     flag_line = true;
     //client.flush();
@@ -127,6 +165,7 @@ void loop()
     Serial.println("Line mode OFF");
   }
 
+  //movement commands
   if(!flag_line){
     if  ( request == "GET /F HTTP/1.1" ) {
       Serial.println("F");
@@ -178,6 +217,8 @@ void loop()
     //CODE FOR LINE FOLLOWING
     //S1 Sensor on right side
     Serial.println("Line Follower Mode!");
+    speedCar = speedCarlist[3];
+    turnSpeed = 400; //turn speed of robot
     while(flag_line){
       // //checking for new request
       // WiFiClient client = server.available();
