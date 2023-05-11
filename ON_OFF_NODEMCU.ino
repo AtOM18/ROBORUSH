@@ -71,7 +71,7 @@ void goBack(){
  
       digitalWrite(IN_1, HIGH);
       digitalWrite(IN_2, LOW);
-      analogWrite(ENA, speedCar);
+      analogWrite(ENA, backSpeed);
  
       digitalWrite(IN_3, HIGH);
       digitalWrite(IN_4, LOW);
